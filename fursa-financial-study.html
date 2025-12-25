@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شركة فرصة - دراسة جدوى مالية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0f1c 0%, #1a1f35 50%, #0d1525 100%);
+      font-family: 'Tajawal', 'Segoe UI', sans-serif;
+      color: #e8eaf6;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+    
+    .input-field {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #00d4ff;
+      font-size: 16px;
+      font-weight: 600;
+      width: 100%;
+      transition: all 0.3s ease;
+      text-align: center;
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      background: rgba(0, 212, 255, 0.08);
+    }
+    
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #00d4ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .driver-row {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 14px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      display: grid;
+      grid-template-columns: 40px 1fr 120px 100px 120px 120px 100px;
+      gap: 16px;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+    
+    .driver-row:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .driver-row.inactive {
+      opacity: 0.4;
+    }
+    
+    .toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #00d4ff, #00ff88);
+      color: #0a0f1c;
+    }
+    
+    .toggle-btn.inactive {
+      background: rgba(255, 255, 255, 0.1);
+      color: #666;
+    }
+    
+    .badge {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+    }
+    
+    .badge.bonus {
+      background: rgba(0, 255, 136, 0.15);
+      color: #00ff88;
+      border: 1px solid rgba(0, 255, 136, 0.3);
+    }
+    
+    .badge.deduction {
+      background: rgba(255, 82, 82, 0.15);
+      color: #ff5252;
+      border: 1px solid rgba(255, 82, 82, 0.3);
+    }
+    
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .section-title::before {
+      content: '';
+      width: 4px;
+      height: 28px;
+      background: linear-gradient(135deg, #00d4ff, #00ff88);
+      border-radius: 2px;
+    }
+    
+    .header-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 16px;
+      padding: 12px 20px;
+      background: rgba(0, 212, 255, 0.05);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #8892b0;
+    }
+    
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    
+    .summary-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+    }
+    
+    .summary-card.highlight {
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1));
+      border-color: rgba(0, 212, 255, 0.3);
+    }
+    
+    .small-input {
+      width: 90px;
+      padding: 10px;
+      font-size: 14px;
+    }
+    
+    .driver-name-input {
+      background: transparent;
+      border: none;
+      color: #e8eaf6;
+      font-size: 15px;
+      font-weight: 500;
+      width: 100%;
+      font-family: 'Tajawal', sans-serif;
+    }
+    
+    .driver-name-input:focus {
+      outline: none;
+      color: #00d4ff;
+    }
+
+    @media (max-width: 1200px) {
+      .driver-row {
+        grid-template-columns: 40px 1fr 100px 80px 100px 100px 90px;
+        gap: 10px;
+        padding: 12px 16px;
+      }
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .driver-row {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .header-grid {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useMemo } = React;
+
+    const FursaFinancialStudy = () => {
+      const [baseSalary, setBaseSalary] = useState(2500);
+      const [targetOrdersPerDay, setTargetOrdersPerDay] = useState(15);
+      const [orderValue, setOrderValue] = useState(8);
+      const [workingDays, setWorkingDays] = useState(30);
+      
+      const [roomRent, setRoomRent] = useState(1500);
+      const [driversPerRoom, setDriversPerRoom] = useState(4);
+      const [internetPerDriver, setInternetPerDriver] = useState(100);
+      const [residencyFee, setResidencyFee] = useState(2450);
+      const [sponsorshipTransfer, setSponsorshipTransfer] = useState(2000);
+      const [newDriversCount, setNewDriversCount] = useState(0);
+      const [fuelPerDriver, setFuelPerDriver] = useState(500);
+      
+      const [officeRent, setOfficeRent] = useState(2000);
+      const [electricityWater, setElectricityWater] = useState(500);
+      const [supervisorsSalary, setSupervisorsSalary] = useState(2000);
+      const [printingMisc, setPrintingMisc] = useState(500);
+      
+      const [revenuePerOrder, setRevenuePerOrder] = useState(12);
+      
+      const [drivers, setDrivers] = useState([
+        { id: 1, name: 'مندوب 1', ordersPerDay: 15, active: true },
+        { id: 2, name: 'مندوب 2', ordersPerDay: 12, active: true },
+        { id: 3, name: 'مندوب 3', ordersPerDay: 17, active: true },
+        { id: 4, name: 'مندوب 4', ordersPerDay: 14, active: true },
+        { id: 5, name: 'مندوب 5', ordersPerDay: 0, active: false },
+        { id: 6, name: 'مندوب 6', ordersPerDay: 0, active: false },
+        { id: 7, name: 'مندوب 7', ordersPerDay: 0, active: false },
+        { id: 8, name: 'مندوب 8', ordersPerDay: 0, active: false },
+        { id: 9, name: 'مندوب 9', ordersPerDay: 0, active: false },
+        { id: 10, name: 'مندوب 10', ordersPerDay: 0, active: false },
+        { id: 11, name: 'مندوب 11', ordersPerDay: 0, active: false },
+        { id: 12, name: 'مندوب 12', ordersPerDay: 0, active: false },
+        { id: 13, name: 'مندوب 13', ordersPerDay: 0, active: false },
+        { id: 14, name: 'مندوب 14', ordersPerDay: 0, active: false },
+        { id: 15, name: 'مندوب 15', ordersPerDay: 0, active: false },
+      ]);
+
+      const updateDriver = (id, field, value) => {
+        setDrivers(prev => prev.map(d => 
+          d.id === id ? { ...d, [field]: field === 'ordersPerDay' ? Number(value) : value } : d
+        ));
+      };
+
+      const toggleDriver = (id) => {
+        setDrivers(prev => prev.map(d => 
+          d.id === id ? { ...d, active: !d.active } : d
+        ));
+      };
+
+      const calculations = useMemo(() => {
+        const activeDrivers = drivers.filter(d => d.active);
+        const targetMonthlyOrders = targetOrdersPerDay * workingDays;
+        
+        const driverDetails = activeDrivers.map(driver => {
+          const monthlyOrders = driver.ordersPerDay * workingDays;
+          const orderDifference = monthlyOrders - targetMonthlyOrders;
+          const adjustment = orderDifference * orderValue;
+          const finalSalary = baseSalary + adjustment;
+          const status = orderDifference >= 0 ? 'bonus' : 'deduction';
+          
+          return {
+            ...driver,
+            monthlyOrders,
+            orderDifference,
+            adjustment,
+            finalSalary: Math.max(0, finalSalary),
+            status
+          };
+        });
+        
+        const totalSalaries = driverDetails.reduce((sum, d) => sum + d.finalSalary, 0);
+        const totalOrders = driverDetails.reduce((sum, d) => sum + d.monthlyOrders, 0);
+        
+        const roomsNeeded = Math.ceil(activeDrivers.length / driversPerRoom);
+        const housingCost = roomsNeeded * roomRent;
+        const internetCost = activeDrivers.length * internetPerDriver;
+        const residencyCostMonthly = (residencyFee / 3) * activeDrivers.length;
+        const sponsorshipCost = newDriversCount * sponsorshipTransfer;
+        const fuelCost = activeDrivers.length * fuelPerDriver;
+        const adminFixedCosts = officeRent + electricityWater + supervisorsSalary + printingMisc;
+        
+        const totalFixedCosts = housingCost + internetCost + residencyCostMonthly + sponsorshipCost + fuelCost + adminFixedCosts;
+        const totalCosts = totalSalaries + totalFixedCosts;
+        
+        const totalRevenue = totalOrders * revenuePerOrder;
+        const netProfit = totalRevenue - totalCosts;
+        const profitMargin = totalRevenue > 0 ? (netProfit / totalRevenue) * 100 : 0;
+        
+        return {
+          activeDrivers,
+          driverDetails,
+          totalSalaries,
+          totalOrders,
+          targetMonthlyOrders,
+          roomsNeeded,
+          housingCost,
+          internetCost,
+          residencyCostMonthly,
+          sponsorshipCost,
+          fuelCost,
+          adminFixedCosts,
+          totalFixedCosts,
+          totalCosts,
+          totalRevenue,
+          netProfit,
+          profitMargin
+        };
+      }, [drivers, baseSalary, targetOrdersPerDay, orderValue, workingDays, 
+          roomRent, driversPerRoom, internetPerDriver, residencyFee, 
+          sponsorshipTransfer, newDriversCount, revenuePerOrder, fuelPerDriver,
+          officeRent, electricityWater, supervisorsSalary, printingMisc]);
+
+      const formatNumber = (num) => {
+        return new Intl.NumberFormat('ar-SA').format(Math.round(num));
+      };
+
+      return (
+        <div style={{ padding: '24px', direction: 'rtl' }}>
+          {/* Header */}
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '40px',
+            padding: '40px',
+            background: 'linear-gradient(135deg, rgba(0, 212, 255, 0.08), rgba(0, 255, 136, 0.05))',
+            borderRadius: '24px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <div style={{
+              fontSize: '14px',
+              color: '#00d4ff',
+              letterSpacing: '4px',
+              marginBottom: '12px',
+              fontWeight: '500'
+            }}>FINANCIAL FEASIBILITY STUDY</div>
+            <h1 style={{
+              fontSize: '48px',
+              fontWeight: '800',
+              margin: '0 0 8px 0',
+              background: 'linear-gradient(135deg, #fff, #00d4ff)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}>شركة فرصة</h1>
+            <p style={{ color: '#8892b0', fontSize: '16px', margin: 0 }}>
+              دراسة جدوى مالية لخدمات توصيل الطلبات
+            </p>
+          </div>
+
+          {/* المتغيرات الأساسية */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">⚙️ المتغيرات الأساسية</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  الراتب الأساسي (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={baseSalary}
+                  onChange={(e) => setBaseSalary(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  الهدف اليومي (طلبات)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={targetOrdersPerDay}
+                  onChange={(e) => setTargetOrdersPerDay(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  قيمة الطلب الواحد (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={orderValue}
+                  onChange={(e) => setOrderValue(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  أيام العمل الشهرية
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={workingDays}
+                  onChange={(e) => setWorkingDays(Number(e.target.value))}
+                />
+              </div>
+            </div>
+            <div style={{
+              marginTop: '20px',
+              padding: '16px 24px',
+              background: 'rgba(0, 212, 255, 0.08)',
+              borderRadius: '12px',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '40px'
+            }}>
+              <span style={{ color: '#8892b0' }}>
+                الهدف الشهري: <strong style={{ color: '#00d4ff' }}>{formatNumber(calculations.targetMonthlyOrders)}</strong> طلب
+              </span>
+            </div>
+          </div>
+
+          {/* التكاليف التشغيلية */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">💰 التكاليف التشغيلية</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '24px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  إيجار الغرفة الشهري (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={roomRent}
+                  onChange={(e) => setRoomRent(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  عدد المناديب بالغرفة
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={driversPerRoom}
+                  onChange={(e) => setDriversPerRoom(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  الإنترنت لكل مندوب (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={internetPerDriver}
+                  onChange={(e) => setInternetPerDriver(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  رسوم الإقامة / 3 أشهر (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={residencyFee}
+                  onChange={(e) => setResidencyFee(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  نقل الكفالة (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={sponsorshipTransfer}
+                  onChange={(e) => setSponsorshipTransfer(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  عدد المناديب الجدد
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={newDriversCount}
+                  onChange={(e) => setNewDriversCount(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  البترول لكل مندوب شهرياً (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={fuelPerDriver}
+                  onChange={(e) => setFuelPerDriver(Number(e.target.value))}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* التكاليف الثابتة الإدارية */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">🏢 التكاليف الثابتة الإدارية</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  إيجار المقر (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={officeRent}
+                  onChange={(e) => setOfficeRent(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  كهرباء ومياه (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={electricityWater}
+                  onChange={(e) => setElectricityWater(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  رواتب المشرفين (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={supervisorsSalary}
+                  onChange={(e) => setSupervisorsSalary(Number(e.target.value))}
+                />
+              </div>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  طباعة ومصاريف أخرى (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={printingMisc}
+                  onChange={(e) => setPrintingMisc(Number(e.target.value))}
+                />
+              </div>
+            </div>
+            <div style={{
+              marginTop: '20px',
+              padding: '16px 24px',
+              background: 'rgba(255, 152, 0, 0.1)',
+              border: '1px solid rgba(255, 152, 0, 0.3)',
+              borderRadius: '12px',
+              display: 'flex',
+              justifyContent: 'center'
+            }}>
+              <span style={{ color: '#ff9800', fontWeight: '600' }}>
+                إجمالي التكاليف الثابتة الإدارية: <strong style={{ fontSize: '18px' }}>{formatNumber(officeRent + electricityWater + supervisorsSalary + printingMisc)}</strong> ريال/شهرياً
+              </span>
+            </div>
+          </div>
+
+          {/* الإيرادات */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">📈 إيرادات جاهز</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '24px' }}>
+              <div>
+                <label style={{ display: 'block', marginBottom: '10px', color: '#8892b0', fontSize: '14px' }}>
+                  قيمة الإيراد لكل طلب من جاهز (ريال)
+                </label>
+                <input
+                  type="number"
+                  className="input-field"
+                  value={revenuePerOrder}
+                  onChange={(e) => setRevenuePerOrder(Number(e.target.value))}
+                />
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'rgba(0, 255, 136, 0.08)',
+                borderRadius: '16px',
+                padding: '20px'
+              }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ color: '#8892b0', fontSize: '14px', marginBottom: '8px' }}>
+                    الربح لكل طلب
+                  </div>
+                  <div style={{ fontSize: '28px', fontWeight: '800', color: '#00ff88' }}>
+                    {formatNumber(revenuePerOrder - orderValue)} ريال
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* جدول المناديب */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">👥 بيانات المناديب</div>
+            
+            <div className="header-grid">
+              <div style={{ textAlign: 'center' }}>الحالة</div>
+              <div>اسم المندوب</div>
+              <div style={{ textAlign: 'center' }}>طلبات/يوم</div>
+              <div style={{ textAlign: 'center' }}>شهرياً</div>
+              <div style={{ textAlign: 'center' }}>الفرق</div>
+              <div style={{ textAlign: 'center' }}>التعديل</div>
+              <div style={{ textAlign: 'center' }}>المستحق</div>
+            </div>
+
+            {drivers.map((driver) => {
+              const detail = calculations.driverDetails.find(d => d.id === driver.id);
+              return (
+                <div key={driver.id} className={`driver-row ${driver.active ? '' : 'inactive'}`}>
+                  <button
+                    className={`toggle-btn ${driver.active ? 'active' : 'inactive'}`}
+                    onClick={() => toggleDriver(driver.id)}
+                  >
+                    {driver.active ? '✓' : '+'}
+                  </button>
+                  
+                  <input
+                    type="text"
+                    className="driver-name-input"
+                    value={driver.name}
+                    onChange={(e) => updateDriver(driver.id, 'name', e.target.value)}
+                    disabled={!driver.active}
+                  />
+                  
+                  <input
+                    type="number"
+                    className="input-field small-input"
+                    style={{ margin: '0 auto' }}
+                    value={driver.ordersPerDay}
+                    onChange={(e) => updateDriver(driver.id, 'ordersPerDay', e.target.value)}
+                    disabled={!driver.active}
+                  />
+                  
+                  <div style={{ textAlign: 'center', color: '#00d4ff', fontWeight: '600' }}>
+                    {driver.active ? formatNumber(detail?.monthlyOrders || 0) : '-'}
+                  </div>
+                  
+                  <div style={{ textAlign: 'center' }}>
+                    {driver.active && detail ? (
+                      <span style={{ 
+                        color: detail.orderDifference >= 0 ? '#00ff88' : '#ff5252',
+                        fontWeight: '600'
+                      }}>
+                        {detail.orderDifference >= 0 ? '+' : ''}{formatNumber(detail.orderDifference)}
+                      </span>
+                    ) : '-'}
+                  </div>
+                  
+                  <div style={{ textAlign: 'center' }}>
+                    {driver.active && detail ? (
+                      <span className={`badge ${detail.status}`}>
+                        {detail.adjustment >= 0 ? '+' : ''}{formatNumber(detail.adjustment)}
+                      </span>
+                    ) : '-'}
+                  </div>
+                  
+                  <div style={{ 
+                    textAlign: 'center', 
+                    fontWeight: '700',
+                    fontSize: '16px',
+                    color: driver.active ? '#fff' : '#666'
+                  }}>
+                    {driver.active ? formatNumber(detail?.finalSalary || 0) : '-'}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* الملخص المالي */}
+          <div className="glass-card" style={{ marginBottom: '24px' }}>
+            <div className="section-title">📊 الملخص المالي الشهري</div>
+            
+            <div className="summary-grid" style={{ marginBottom: '24px' }}>
+              <div className="summary-card">
+                <div style={{ color: '#8892b0', fontSize: '14px', marginBottom: '12px' }}>عدد المناديب النشطين</div>
+                <div className="stat-value">{calculations.activeDrivers.length}</div>
+              </div>
+              <div className="summary-card">
+                <div style={{ color: '#8892b0', fontSize: '14px', marginBottom: '12px' }}>إجمالي الطلبات</div>
+                <div className="stat-value">{formatNumber(calculations.totalOrders)}</div>
+              </div>
+              <div className="summary-card">
+                <div style={{ color: '#8892b0', fontSize: '14px', marginBottom: '12px' }}>عدد الغرف المطلوبة</div>
+                <div className="stat-value">{calculations.roomsNeeded}</div>
+              </div>
+              <div className="summary-card highlight">
+                <div style={{ color: '#8892b0', fontSize: '14px', marginBottom: '12px' }}>هامش الربح</div>
+                <div className="stat-value" style={{
+                  background: calculations.profitMargin >= 0 
+                    ? 'linear-gradient(135deg, #00ff88, #00d4ff)' 
+                    : 'linear-gradient(135deg, #ff5252, #ff8a80)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}>
+                  {calculations.profitMargin.toFixed(1)}%
+                </div>
+              </div>
+            </div>
+
+            {/* تفاصيل التكاليف والإيرادات */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+              {/* التكاليف */}
+              <div style={{
+                background: 'rgba(255, 82, 82, 0.05)',
+                border: '1px solid rgba(255, 82, 82, 0.2)',
+                borderRadius: '16px',
+                padding: '24px'
+              }}>
+                <h3 style={{ color: '#ff5252', marginBottom: '20px', fontSize: '18px' }}>📉 التكاليف</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>إجمالي الرواتب</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.totalSalaries)} ريال</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>تكلفة السكن</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.housingCost)} ريال</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>الإنترنت</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.internetCost)} ريال</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>الإقامات (شهري)</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.residencyCostMonthly)} ريال</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>نقل الكفالة</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.sponsorshipCost)} ريال</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>البترول</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.fuelCost)} ريال</span>
+                  </div>
+                  <div style={{ 
+                    background: 'rgba(255, 152, 0, 0.1)',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    marginTop: '8px'
+                  }}>
+                    <div style={{ color: '#ff9800', fontSize: '13px', marginBottom: '8px', fontWeight: '600' }}>التكاليف الإدارية:</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
+                      <span style={{ color: '#8892b0' }}>إيجار المقر</span>
+                      <span>{formatNumber(officeRent)} ريال</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
+                      <span style={{ color: '#8892b0' }}>كهرباء ومياه</span>
+                      <span>{formatNumber(electricityWater)} ريال</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '4px' }}>
+                      <span style={{ color: '#8892b0' }}>رواتب المشرفين</span>
+                      <span>{formatNumber(supervisorsSalary)} ريال</span>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px' }}>
+                      <span style={{ color: '#8892b0' }}>طباعة ومصاريف أخرى</span>
+                      <span>{formatNumber(printingMisc)} ريال</span>
+                    </div>
+                  </div>
+                  <div style={{ 
+                    borderTop: '1px solid rgba(255, 255, 255, 0.1)', 
+                    paddingTop: '12px', 
+                    marginTop: '8px',
+                    display: 'flex', 
+                    justifyContent: 'space-between' 
+                  }}>
+                    <span style={{ fontWeight: '700', color: '#ff5252' }}>إجمالي التكاليف</span>
+                    <span style={{ fontWeight: '700', color: '#ff5252', fontSize: '18px' }}>
+                      {formatNumber(calculations.totalCosts)} ريال
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* الإيرادات */}
+              <div style={{
+                background: 'rgba(0, 255, 136, 0.05)',
+                border: '1px solid rgba(0, 255, 136, 0.2)',
+                borderRadius: '16px',
+                padding: '24px'
+              }}>
+                <h3 style={{ color: '#00ff88', marginBottom: '20px', fontSize: '18px' }}>📈 الإيرادات</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>إجمالي الطلبات</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(calculations.totalOrders)} طلب</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#8892b0' }}>قيمة الطلب</span>
+                    <span style={{ fontWeight: '600' }}>{formatNumber(revenuePerOrder)} ريال</span>
+                  </div>
+                  <div style={{ 
+                    borderTop: '1px solid rgba(255, 255, 255, 0.1)', 
+                    paddingTop: '12px', 
+                    marginTop: '8px',
+                    display: 'flex', 
+                    justifyContent: 'space-between' 
+                  }}>
+                    <span style={{ fontWeight: '700', color: '#00ff88' }}>إجمالي الإيرادات</span>
+                    <span style={{ fontWeight: '700', color: '#00ff88', fontSize: '18px' }}>
+                      {formatNumber(calculations.totalRevenue)} ريال
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* صافي الربح */}
+              <div style={{
+                background: calculations.netProfit >= 0 
+                  ? 'linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 255, 136, 0.1))'
+                  : 'linear-gradient(135deg, rgba(255, 82, 82, 0.1), rgba(255, 138, 128, 0.1))',
+                border: `1px solid ${calculations.netProfit >= 0 ? 'rgba(0, 212, 255, 0.3)' : 'rgba(255, 82, 82, 0.3)'}`,
+                borderRadius: '16px',
+                padding: '24px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}>
+                <h3 style={{ 
+                  color: calculations.netProfit >= 0 ? '#00d4ff' : '#ff5252', 
+                  marginBottom: '20px', 
+                  fontSize: '18px' 
+                }}>
+                  {calculations.netProfit >= 0 ? '🎯 صافي الربح' : '⚠️ صافي الخسارة'}
+                </h3>
+                <div style={{
+                  fontSize: '42px',
+                  fontWeight: '800',
+                  color: calculations.netProfit >= 0 ? '#00ff88' : '#ff5252'
+                }}>
+                  {formatNumber(Math.abs(calculations.netProfit))}
+                </div>
+                <div style={{ color: '#8892b0', marginTop: '8px' }}>ريال سعودي / شهرياً</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div style={{
+            textAlign: 'center',
+            padding: '24px',
+            color: '#8892b0',
+            fontSize: '14px'
+          }}>
+            <div style={{ marginBottom: '8px' }}>
+              شركة فرصة لخدمات التوصيل • دراسة جدوى مالية
+            </div>
+            <div style={{ opacity: 0.6 }}>
+              جميع الأرقام تقديرية وقابلة للتعديل
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<FursaFinancialStudy />);
+  </script>
+</body>
+</html>
